@@ -21,15 +21,23 @@ with open("./html/img_urls.json", "r") as f:
     img_urls = json.loads(f.read())
 
 
-for url in img_urls[0:5]:
-    r = requests.get(url, stream=True)
+i = 0
 
-    if r.status_code == 200:
-        path = url.replace("http://", "").replace("https://", "").replace("/", "|")
+for url in img_urls:
+    print i, len(img_urls)
+    try:
+        r = requests.get(url, stream=True, timeout=5)
 
-        with open(path, 'wb') as f:
-            r.raw.decode_content = True
-            shutil.copyfileobj(r.raw, f)
+        if r.status_code == 200:
+            path = "./html/img/" + url.replace("http://", "").replace("https://", "").replace("/", "|")
+
+            with open(path, 'wb') as f:
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw, f)
+    except Exception as e:
+        print "error", e
+
+    i = i + 1
 
 
 
