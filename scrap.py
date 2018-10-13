@@ -5,76 +5,8 @@ import shutil
 from bs4 import BeautifulSoup
 import pprint
 import data
-
-
-POST_TEMPLATE = u"""
----
-layout: post
-title:  "{title}"
-date:   {timestamp}
-categories: {categories}
----
-{content}
-"""
-
-
-
-def read_post(path):
-    with open(path, "r") as f:
-        soup = BeautifulSoup(f, "html5lib")
-
-    title = soup.select("#content > div > h2 > span.titlename")[0].contents[0]
-    y = soup.select("#content > div > h2 > span.titledate > span.titledate-year")[0].contents[0]
-    m = soup.select("#content > div > h2 > span.titledate > span.titledate-month")[0].contents[0]
-    d = soup.select("#content > div > h2 > span.titledate > span.titledate-day")[0].contents[0]
-    h = soup.select("#content > div > h2 > span.titledate > span.titledate-hour")[0].contents[0]
-    mm = soup.select("#content > div > h2 > span.titledate > span.titledate-min")[0].contents[0]
-
-    timestamp = "{y}-{m}-{d} {h}:{mm}:00 +0800".format(
-        y=y,
-        m=m,
-        d=d,
-        h=h,
-        mm=mm
-    )
-
-    file_name = u"{y}-{m}-{d}-{title}".format(
-        y=y,
-        m=m,
-        d=d,
-        title=title
-    )
-
-    dest_path = "./dian/_posts/" + file_name
-
-    with codecs.open(dest_path, 'w', encoding='utf8') as f:
-        content = POST_TEMPLATE.format({
-            title=title,
-            timestamp=timestamp,
-        })
-
-        f.write(content)
-
-
-    # post_data = dict(
-        # title=title
-    # )
-
-    # print file_name
-
-
-
-
-# for fname in data.post_file_paths:
-    # post_path = "./raw/post/" + fname
-    # read_post(post_path)
-
-
-
-
-test_post = "./raw/post/blog.xuite.net|music_dian|wretch|141767176.html"
-read_post(test_post)
-
+from sets import Set
+from collections import defaultdict
 
 
 ################################
